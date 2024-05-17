@@ -67,7 +67,7 @@ def main():
 
     # Print coder and version in different colors
     if version is not None and coder is not None:
-        print(f"{colors.YELLOW}Coder: {coder:<50}{colors.GREEN}{version:>30}{colors.END}\n")
+        print(f"{colors.YELLOW}Coder: {coder:<50}{colors.GREEN}{version:>27}{colors.END}\n")
     else:
         print(f"{colors.RED}Error: Version or coder not found.{colors.END}")
         exit()
