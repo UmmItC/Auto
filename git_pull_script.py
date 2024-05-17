@@ -22,21 +22,15 @@ banner = """
 """
 
 creator = "Create by: UmmIt"
-version = "v0.1"
-interval = 7200
+version = "v0.2"
+interval = 30
 
-def git_pull(path, url):
+def git_pull(path):
     try:
         os.chdir(path)  # Change directory to the repository path
-        # Check if the URL is reachable
-        response = requests.head(url)
-        if response.status_code == 200:
-            os.system("git pull origin pages")
-        else:
-            print(f"{colors.RED}Error: URL '{url}' is not reachable.{colors.END}")
+        os.system("git pull origin main")  # Assuming the default branch is 'main'
     except Exception as e:
-        print(f"{colors.RED}Error occurred while pulling updates from {url} in path {path}: {str(e).split(': ')[-1]}{colors.END} \nPlease ensure the pulling URL is correct.")
-        exit()
+        print(f"{colors.RED}Error occurred while pulling updates in path {path}: {str(e)}{colors.END}")
 
 def main():
 
@@ -63,19 +57,36 @@ def main():
         print(f"{colors.RED}Error: File 'paths_and_urls.json' not found.{colors.END}")
         return
 
+    # Dictionary to store last update times
+    last_update_times = {}
+
     while True:
-        print("Pulling updates from repositories...")
+        print("Checking for repository updates...")
         for repo in repositories:
             try:
-                path = repo["path"]
-                url = repo["url"]
-                git_pull(path, url)
-                print(f"{colors.GREEN}Git pull executed for {url} in path {path}.{colors.END}")
-            except KeyError:
-                print(f"{colors.RED}Error: Malformed JSON data. 'path' or 'url' key not found in repository.{colors.END}")
+                username = repo["username"]
+                repository = repo["repository"]
+                url = f"https://codeberg.org/api/v1/repos/{username}/{repository}"
+                
+                # Fetch repository data
+                response = requests.get(url)
+                if response.status_code == 200:
+                    repo_data = response.json()
+                    last_update_time = repo_data["updated_at"]
+                    if repository in last_update_times:
+                        if last_update_times[repository] != last_update_time:
+                            # Repository has been updated, pull changes
+                            path = repo["path"]
+                            git_pull(path)
+                            last_update_times[repository] = last_update_time
+                            print(f"{colors.GREEN}Updated repository: {username}/{repository}.{colors.END}")
+                    else:
+                        # First time checking, store update time
+                        last_update_times[repository] = last_update_time
             except Exception as e:
-                print(f"{colors.RED}Unexpected error: {str(e).split(': ')[-1]}{colors.END}")
-        print("Waiting for next pull...")
+                print(f"{colors.RED}Error occurred while checking repository {username}/{repository}: {str(e)}{colors.END}")
+
+        print("Waiting for next check...")
         time.sleep(interval)
 
 if __name__ == "__main__":

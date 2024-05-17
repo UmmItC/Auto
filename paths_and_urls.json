@@ -1,8 +1,10 @@
 {
     "repositories": [
         {
-            "path": "/your/pulling/path/",
-            "url": "<url_of_your_repository.git>"
+            "username": "username",
+            "repository": "repository",
+            "path": "/path/of/your/repository"
         }
     ]
 }
+
