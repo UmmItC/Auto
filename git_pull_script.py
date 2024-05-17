@@ -22,8 +22,8 @@ banner = """
 """
 
 creator = "Create by: UmmIt"
-version = "v0.2"
-interval = 30
+version = "v0.3"
+interval = 20
 
 def git_pull(path):
     try:
@@ -62,6 +62,12 @@ def main():
 
     while True:
         print("Checking for repository updates...")
+
+        # Initialize last_update_times if it's empty
+        if not last_update_times:
+            for repo in repositories:
+                last_update_times[repo["repository"]] = ""
+
         for repo in repositories:
             try:
                 username = repo["username"]
@@ -73,16 +79,13 @@ def main():
                 if response.status_code == 200:
                     repo_data = response.json()
                     last_update_time = repo_data["updated_at"]
-                    if repository in last_update_times:
-                        if last_update_times[repository] != last_update_time:
-                            # Repository has been updated, pull changes
-                            path = repo["path"]
-                            git_pull(path)
-                            last_update_times[repository] = last_update_time
-                            print(f"{colors.GREEN}Updated repository: {username}/{repository}.{colors.END}")
-                    else:
-                        # First time checking, store update time
+                    if last_update_times[repository] != last_update_time:
+                        # Repository has been updated, pull changes
+                        path = repo["path"]
+                        git_pull(path)
                         last_update_times[repository] = last_update_time
+                        print(f"{colors.GREEN}Updated repository: {username}/{repository}.{colors.END}")
+
             except Exception as e:
                 print(f"{colors.RED}Error occurred while checking repository {username}/{repository}: {str(e)}{colors.END}")
 
@@ -91,3 +94,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
