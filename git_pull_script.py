@@ -21,8 +21,28 @@ banner = """
 //     | | ((___( (  / /   ((___/ / ((____/ / / /   / /   //       ((___( ( // //
 """
 
-creator = "Create by: UmmIt"
-version = "v0.3"
+# Read version and coder from file
+def read_version_and_coder():
+    version = None
+    coder = None
+    try:
+        with open("version", "r") as file:
+            lines = file.readlines()
+            for line in lines:
+                if line.startswith("version"):
+                    version = line.split("=")[1].strip()
+                elif line.startswith("coder"):
+                    coder = line.split("=")[1].strip()
+    except FileNotFoundError:
+        print(f"{colors.RED}Error: File 'version.txt' not found.{colors.END}")
+    except Exception as e:
+        print(f"{colors.RED}Error occurred while reading 'version.txt': {str(e)}{colors.END}")
+    return version, coder
+
+version, coder = read_version_and_coder()
+if version is None or coder is None:
+    exit()
+
 interval = 20
 
 def git_pull(path):
@@ -45,8 +65,12 @@ def main():
     # Print ASCII banner
     print(colors.DARK_RED + banner + colors.END)
 
-    # Print creator and version in different colors
-    print(f"{colors.YELLOW}{creator:<50}{colors.GREEN}{version:>30}{colors.END}\n")
+    # Print coder and version in different colors
+    if version is not None and coder is not None:
+        print(f"{colors.YELLOW}Coder: {coder:<50}{colors.GREEN}{version:>30}{colors.END}\n")
+    else:
+        print(f"{colors.RED}Error: Version or coder not found.{colors.END}")
+        exit()
 
     # Read paths and URLs from JSON file
     try:
