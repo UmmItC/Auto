@@ -32,19 +32,21 @@ AutoGitPull is a Python script that automates the process of pulling updates fro
     {
         "repositories": [
             {
-                "path": "/path/to/repository1",
-                "url": "https://github.com/your_username/repository1.git"
+                "username": "username",
+                "repository": "repository",
+                "path": "/path/of/your/repository"
             },
             {
-                "path": "/path/to/repository2",
-                "url": "https://github.com/your_username/repository2.git"
-            },
-            ...
+                "username": "username",
+                "repository": "repository",
+                "path": "/path/of/your/repository"
+
+            }
         ]
     }
     ```
 
-    Replace `/path/to/repository1`, `/path/to/repository2`, etc., with the local paths to your Git repositories, and replace `https://github.com/your_username/repository1.git`, `https://github.com/your_username/repository2.git`, etc., with the URLs of your Git repositories.
+Replace `username` with your Codeberg username, `repository` with the name of your repository, and ``/path/of/your/repository`` with the actual path to your repository.
 
 5. Run the script:
 
@@ -56,4 +58,4 @@ AutoGitPull is a Python script that automates the process of pulling updates fro
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
