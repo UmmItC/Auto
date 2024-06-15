@@ -18,7 +18,7 @@ AutoGitPull is a Python script that automates the process of pulling updates fro
 1. Clone this repository to your local machine:
 
     ```bash
-    git clone https://github.com/UmmIt/AutoGitPull.git
+    git clone https://codeberg.org/UmmIt/AutoGitPull.git
     ```
 
 2. Navigate to the project directory:
@@ -51,7 +51,7 @@ Replace `username` with your Codeberg username, `repository` with the name of yo
 5. Run the script:
 
     ```bash
-    python3 AutoGitPull.py
+    python3 git_pull_script.py
     ```
 
 6. Follow the instructions in the terminal to interact with the script (e.g., type `help` to list available commands, `pull` to pull updates from the Git repositories, `exit` to exit the program).
