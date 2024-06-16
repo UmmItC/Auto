@@ -40,21 +40,18 @@ AutoGitPull is a Python script that automates the process of pulling updates fro
                 "username": "username",
                 "repository": "repository",
                 "path": "/path/of/your/repository"
-
             }
         ]
     }
     ```
 
-Replace `username` with your Codeberg username, `repository` with the name of your repository, and ``/path/of/your/repository`` with the actual path to your repository.
+Replace `username` with your Codeberg username, `repository` with the name of your repository, and `/path/of/your/repository` with the actual path to your repository.
 
 5. Run the script:
 
     ```bash
     python3 git_pull_script.py
     ```
-
-6. Follow the instructions in the terminal to interact with the script (e.g., type `help` to list available commands, `pull` to pull updates from the Git repositories, `exit` to exit the program).
 
 ## License
 
