@@ -3,7 +3,9 @@
         {
             "username": "username",
             "repository": "repository",
-            "path": "/path/of/your/repository"
+            "path": "/path/of/your/repository",
+            "remote": "origin",
+            "branch": "master"
         }
     ]
 }

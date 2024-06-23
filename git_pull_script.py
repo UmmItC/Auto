@@ -45,10 +45,10 @@ if version is None or coder is None:
 
 interval = 20
 
-def git_pull(path):
+def git_pull(path, remote="origin", branch="master"):
     try:
         os.chdir(path)  # Change directory to the repository path
-        os.system("git pull origin main")  # Assuming the default branch is 'main'
+        os.system(f"git pull {remote} {branch}")
     except Exception as e:
         print(f"{colors.RED}Error occurred while pulling updates in path {path}: {str(e)}{colors.END}")
 
@@ -96,6 +96,8 @@ def main():
             try:
                 username = repo["username"]
                 repository = repo["repository"]
+                remote = repo["remote"]
+                branch = repo["branch"]
                 url = f"https://codeberg.org/api/v1/repos/{username}/{repository}"
                 
                 # Fetch repository data
@@ -106,12 +108,13 @@ def main():
                     if last_update_times[repository] != last_update_time:
                         # Repository has been updated, pull changes
                         path = repo["path"]
-                        git_pull(path)
+                        git_pull(path, remote, branch)
                         last_update_times[repository] = last_update_time
                         print(f"{colors.GREEN}Updated repository: {username}/{repository}.{colors.END}")
 
             except Exception as e:
                 print(f"{colors.RED}Error occurred while checking repository {username}/{repository}: {str(e)}{colors.END}")
+                exit(0)
 
         print("Waiting for next check...")
         time.sleep(interval)
