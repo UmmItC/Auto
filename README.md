@@ -6,7 +6,6 @@ AutoGitPull is a Python script that automates the process of pulling updates fro
 
 - Automatically pulls updates from multiple Git repositories.
 - Configurable interval for pulling updates.
-- User-friendly terminal interface with commands to list available commands, pull updates, and exit the program.
 
 ## Requirements
 
@@ -34,12 +33,16 @@ AutoGitPull is a Python script that automates the process of pulling updates fro
             {
                 "username": "username",
                 "repository": "repository",
-                "path": "/path/of/your/repository"
+                "path": "/path/of/your/repository",
+                "remote": "origin",
+                "branch": "master"
             },
             {
                 "username": "username",
                 "repository": "repository",
                 "path": "/path/of/your/repository"
+                "remote": "origin",
+                "branch": "master"
             }
         ]
     }
