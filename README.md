@@ -32,15 +32,17 @@ AutoGitPull is a Python script that automates the process of pulling updates fro
         "repositories": [
             {
                 "username": "username",
-                "repository": "repository",
-                "path": "/path/of/your/repository",
+                "repository": "repository_name",
+                "path": "~/Documents/repository_name",
+                "path_chdir": "~/Documents/"
                 "remote": "origin",
                 "branch": "master"
             },
             {
                 "username": "username",
-                "repository": "repository",
-                "path": "/path/of/your/repository"
+                "repository": "repository_name",
+                "path": "~/Documents/repository_name",
+                "path_chdir": "~/Documents/"
                 "remote": "origin",
                 "branch": "master"
             }
