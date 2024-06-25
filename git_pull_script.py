@@ -11,6 +11,7 @@ class colors:
     YELLOW = '\033[93m'
     RED = '\033[91m'
     DARK_RED = '\033[31m'
+    GREY = '\033[90m'
     END = '\033[0m'
 
 # ASCII banner
@@ -46,12 +47,19 @@ if version is None or coder is None:
 
 interval = 20
 
-def git_pull(path, remote="origin", branch="master"):
+def git_pull(path, path_chdir, username, repository, remote="origin", branch="master"):
     try:
-        os.chdir(path)  # Change directory to the repository path
-        os.system(f"git pull {remote} {branch}")
+        if not os.path.exists(path):
+            # Path doesn't exist, change into path_chdir and clone the repository
+            os.makedirs(path_chdir, exist_ok=True)
+            os.chdir(path_chdir)
+            os.system(f"git clone https://codeberg.org/{username}/{repository}.git {path}")
+        else:
+            # Path exists, change into the repository path and pull updates
+            os.chdir(path)
+            os.system(f"git pull {remote} {branch}")
     except Exception as e:
-        print(f"{colors.RED}:: Error - Occurred while pulling updates in path {path}: {str(e)}{colors.END}")
+        print(f"{colors.RED}:: Error - Occurred while handling repository at {path}: {str(e)}{colors.END}")
 
 def main():
 
@@ -86,7 +94,7 @@ def main():
     last_update_times = {}
 
     while True:
-        print("Checking for repository updates...")
+        print(f"{colors.GREY}:: Checking for repository updates... {colors.END}")
 
         # Initialize last_update_times if it's empty
         if not last_update_times:
@@ -99,24 +107,31 @@ def main():
                 repository = repo["repository"]
                 remote = repo["remote"]
                 branch = repo["branch"]
+                path = os.path.expanduser(repo["path"])  # Expand user directory if using ~ in path
+                path_chdir = os.path.expanduser(repo["path_chdir"])  # Expand user directory for path_chdir
                 url = f"https://codeberg.org/api/v1/repos/{username}/{repository}"
-                
+
+                # Check if path exists, if not, clone the repository
+                if not os.path.exists(path):
+                    git_pull(path, path_chdir, username, repository, remote, branch)
+                    continue
+
                 # Fetch repository data
                 response = requests.get(url)
                 response.raise_for_status()  # Raise HTTPError for bad responses (4xx, 5xx)
-                
+
                 # Process response
                 repo_data = response.json()
                 if repo_data:  # Check if repo_data is not None
                     last_update_time = repo_data.get("updated_at")
                     if last_update_time and last_update_times.get(repository) != last_update_time:
                         # Repository has been updated, pull changes
-                        path = repo["path"]
-                        git_pull(path, remote, branch)
+                        git_pull(path, path_chdir, username, repository, remote, branch)
                         last_update_times[repository] = last_update_time
-                        print(f"{colors.GREEN}Updated repository: {username}/{repository}.{colors.END}")
+                        print(f"{colors.GREEN}:: Updated repository: {username}/{repository}.{colors.END}")
                 else:
                     print(f"{colors.RED}:: Error - Empty JSON response while checking repository {username}/{repository}.{colors.END}")
+                    exit(0)
 
             except HTTPError as http_err:
                 if response.status_code == 404:
@@ -133,11 +148,13 @@ def main():
 
             except RequestException as req_err:
                 print(f"{colors.RED}:: Error - Request exception occurred: {req_err}{colors.END}")
+                exit(0)
 
             except Exception as e:
-                print(f"{colors.RED}:: Error - Error occurred while checking repository {username}/{repository}: {str(e)}{colors.END}")
+                print(f"{colors.RED}:: Error - Error occurred while handling repository {username}/{repository}: {str(e)}{colors.END}")
+                exit(0)
 
-        print("Waiting for next check...")
+        print(f"{colors.GREY}---\n:: Waiting for next check...\nEvery 20 seconds per check\n---\n{colors.GREY}")
         time.sleep(interval)
 
 if __name__ == "__main__":
