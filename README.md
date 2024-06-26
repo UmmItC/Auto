@@ -1,11 +1,6 @@
 # AutoGitPull
 
-AutoGitPull is a Python script that automates the process of pulling updates from Git repositories at specified intervals.
-
-## Features
-
-- Automatically pulls updates from multiple Git repositories.
-- Configurable interval for pulling updates.
+AutoGitPull is a Python script designed to automate the synchronization of code from Git repositories when updates are detected.
 
 ## Requirements
 
@@ -14,50 +9,65 @@ AutoGitPull is a Python script that automates the process of pulling updates fro
 
 ## Usage
 
-1. Clone this repository to your local machine:
+1. **Clone the Repository:**
 
-    ```bash
-    git clone https://codeberg.org/UmmIt/AutoGitPull.git
-    ```
+   ```bash
+   git clone https://codeberg.org/your_username/AutoGitPull.git
+   cd AutoGitPull
+   ```
 
-2. Navigate to the project directory:
+2. **Edit `settings.json`:**
 
-    ```bash
-    cd AutoGitPull
-    ```
-3. Edit JSON file which is called `paths_and_urls.json` with the following structure:
+   Edit the `settings.json` file with your repository details. Here is an example structure:
 
-    ```json
-    {
-        "repositories": [
-            {
-                "username": "username",
-                "repository": "repository_name",
-                "path": "~/Documents/repository_name",
-                "path_chdir": "~/Documents/"
-                "remote": "origin",
-                "branch": "master"
-            },
-            {
-                "username": "username",
-                "repository": "repository_name",
-                "path": "~/Documents/repository_name",
-                "path_chdir": "~/Documents/"
-                "remote": "origin",
-                "branch": "master"
-            }
-        ]
-    }
-    ```
+   ```json
+   {
+       "repositories": [
+           {
+               "username": "your_codeberg_username",
+               "repository": "your_repository_name",
+               "path": "/path/to/your/repository",  // Path for 'git pull'
+               "path_chdir": "/path/to/your/repository",  // Path for 'git clone' if not existing
+               "remote": "origin",
+               "branch": "master"
+           },
+           {
+               "username": "another_codeberg_username",
+               "repository": "another_repository_name",
+               "path": "/path/to/another/repository",  // Path for 'git pull'
+               "path_chdir": "/path/to/another/repository",  // Path for 'git clone' if not existing
+               "remote": "origin",
+               "branch": "main"
+           }
+       ]
+   }
+   ```
 
-Replace `username` with your Codeberg username, `repository` with the name of your repository, and `/path/of/your/repository` with the actual path to your repository.
+   - **username**: Replace `"your_codeberg_username"` and `"another_codeberg_username"` with your actual Codeberg usernames.
+   - **repository**: Replace `"your_repository_name"` and `"another_repository_name"` with the names of your repositories.
+   - **path**: Specify the path where the repository is located. This path is used for `git pull` to update the repository.
+   - **path_chdir**: Specify the path where the repository will be cloned if it doesn't exist locally. This path is used for `git clone` when the repository does not exist locally.
+   - **remote**: The name of the remote repository (`origin` is standard).
+   - **branch**: The branch name to pull updates from (e.g., `master`, `main`, etc.).
 
-5. Run the script:
+3. **Alternatively, Use `setup.sh`:**
 
-    ```bash
-    python3 git_pull_script.py
-    ```
+   If you prefer not to manually edit `settings.json`, you can run `setup.sh` to configure your repositories interactively:
+
+   ```bash
+   ./setup.sh
+   ```
+
+   Follow the prompts to enter your Codeberg usernames, repository names, paths, remotes, and branches.
+
+4. **Run the Script:**
+
+   Execute the following command to start syncing updates from your configured repositories:
+
+   ```bash
+   python3 git_pull_script.py
+   ```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE.md) file for details.
