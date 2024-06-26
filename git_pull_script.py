@@ -87,7 +87,7 @@ def main():
             data = json.load(file)
             repositories = data["repositories"]
     except FileNotFoundError:
-        print(f"{colors.RED}:: Error - File 'paths_and_urls.json' not found.{colors.END}")
+        print(f"{colors.RED}:: Error - File 'settings.json' not found.{colors.END}")
         return
 
     # Dictionary to store last update times
