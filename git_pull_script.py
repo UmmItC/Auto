@@ -83,7 +83,7 @@ def main():
 
     # Read paths and URLs from JSON file
     try:
-        with open("paths_and_urls.json") as file:
+        with open("settings.json") as file:
             data = json.load(file)
             repositories = data["repositories"]
     except FileNotFoundError:
