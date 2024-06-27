@@ -51,6 +51,9 @@ def git_pull(path, path_chdir, username, repository, remote="origin", branch="ma
     try:
         if not os.path.exists(path):
             # Path doesn't exist, change into path_chdir and clone the repository
+            print(f"{colors.GREY}:: Repository - Directory path from settings.json not found\n"
+                  f"Initializing environment ... \ncloning repository {username}/{repository}...{colors.END}")
+
             os.makedirs(path_chdir, exist_ok=True)
             os.chdir(path_chdir)
             os.system(f"git clone https://codeberg.org/{username}/{repository}.git {path}")
@@ -94,7 +97,7 @@ def main():
     last_update_times = {}
 
     while True:
-        print(f"{colors.GREY}:: Checking for repository updates... {colors.END}")
+        
 
         # Initialize last_update_times if it's empty
         if not last_update_times:
@@ -124,6 +127,7 @@ def main():
                 repo_data = response.json()
                 if repo_data:  # Check if repo_data is not None
                     last_update_time = repo_data.get("updated_at")
+                    print(f"{colors.GREY}:: Checking for repository updates... {colors.END}")
                     if last_update_time and last_update_times.get(repository) != last_update_time:
                         # Repository has been updated, pull changes
                         git_pull(path, path_chdir, username, repository, remote, branch)
