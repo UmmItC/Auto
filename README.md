@@ -65,7 +65,7 @@ AutoGitPull is a Python script designed to automate the synchronization of code 
    Execute the following command to start syncing updates from your configured repositories:
 
    ```bash
-   python3 git_pull_script.py
+   python3 main.py
    ```
 
 ## License
